@@ -1,0 +1,17 @@
+package com.qualifier;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
+public class EntityManagerFactory {
+
+	private static final long serialVersion = 1L;
+
+	@Inject
+	private Resource resource;
+
+	public EntityManager getEM() {
+		return resource.getEntityManager();
+	}
+
+}
