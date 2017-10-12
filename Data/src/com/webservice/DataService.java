@@ -3,6 +3,7 @@ package com.webservice;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -17,15 +18,22 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.dto.request.RequestProductDetailDTO;
+import com.dto.result.ResultProductDetailDTO;
 import com.entity.Products;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.interfaces.ILProducts;
+import com.interfaces.IRProducts;
 import com.models.ProductModel;
 import com.qualifier.Resource;
 
 @Path("/dataService")
 public class DataService {
 
+	@EJB
+	private IRProducts productsEJB;
+	
 	
 	@Inject
 	private EntityManager em;
@@ -61,5 +69,19 @@ public class DataService {
 	public Response updateProduct(String payload){
 		return this.updateProduct(payload);
 	}
+	
+	
+	@GET
+	@Path("/getDetailProduct")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ResultProductDetailDTO> getDetailProduct(@QueryParam("idProduct") Integer idProduct) {
+		
+		RequestProductDetailDTO rpd = new RequestProductDetailDTO();
+		rpd.setIdProduct(String.valueOf(idProduct));
+		
+		return this.productsEJB.getProductDetail(rpd);
+	}
+	
+	
 
 }
